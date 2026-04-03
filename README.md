@@ -2,6 +2,8 @@
 
 **1.** 
 - Make sure raylib is installed
+- Download the Main_Game file in Visual Studio Code
+- Download all the textures in *resources* in Visual Studio code
 
 **2.** 
 - Save your file and give it a name
