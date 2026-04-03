@@ -1,2 +1,2 @@
-# Game-Project-Repository
-Repository for all files needed for my game project
+# How to run and compile game
+
