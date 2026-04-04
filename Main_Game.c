@@ -22,18 +22,18 @@ Color buildColors[MAX_BUILDINGS] = { 0 };
 
 // Textures for player and enemy
 
-static Texture2D playerTexture;
-static Texture2D boostTexture;
-static Texture2D shrinkTexture;
-static Texture2D pinkTexture;
-static Texture2D invincibleTexture;
-static Texture2D smallInvincibleTexture;
-static Texture2D defaultTexture;
+static Texture2D playerTexture; // Will not be initialised in InitGame(), as it will be constanly updating its texture.
+static Texture2D boostTexture; // For when the boost ability is active
+static Texture2D shrinkTexture; // For when the shrink ability is active
+static Texture2D pinkTexture; // For when both boost and shrink abilities are active
+static Texture2D invincibleTexture; // For when invincibility is active
+static Texture2D smallInvincibleTexture; // For when invincibility and shrink is active
+static Texture2D defaultTexture; // When no abilities are active
 
-static Texture2D enemyTexture;
-static Texture2D defaultEnemyTexture;
-static Texture2D biggerEnemyTexture;
-static Texture2D massiveEnemyTexture;
+static Texture2D enemyTexture; // Will not be initialised in InitGame(), as it will be constanly updating its texture.
+static Texture2D angryTexture; // For smallest enemy size
+static Texture2D furiousTexture; // For medium enemy size
+static Texture2D crazedTexture; // For biggest enemy size
 
 bool gameOver = false;
 
@@ -69,13 +69,13 @@ int wallArrayLength = sizeof(walls) / sizeof(walls[0]);
 
 // Many variables are created
 
-int count;
-int score;
+int count; // Will increase by 1 every second
+int score; 
 int highscore;
 float timer;
-float timeForSpeed;
+float speedTimer; // Timer for changing speed
 
-bool boosting;
+bool boosting; 
 float boostTimer;
 int boostCount;
 
@@ -149,9 +149,9 @@ void InitGame(void) {
 
     // The three textures below will have different frames, and are for the enemy
 
-    defaultEnemyTexture = LoadTexture("resources/angry_frames.png");
-    biggerEnemyTexture = LoadTexture("resources/furious_frames.png");
-    massiveEnemyTexture = LoadTexture("resources/crazed_frames.png");
+    angryTexture = LoadTexture("resources/angry_frames.png");
+    furiousTexture = LoadTexture("resources/furious_frames.png");
+    crazedTexture = LoadTexture("resources/crazed_frames.png");
 
     // Rectangle 'player' has position and size is set
     player = (Rectangle){ 410, 225, 40, 40 };
@@ -189,7 +189,7 @@ void InitGame(void) {
     score = 0;
     highscore = 0;
     timer = 0.0f;
-    timeForSpeed = 0.0f;
+    speedTimer = 0.0f;
 
     boosting = false;
     boostTimer = 0.0f;
@@ -204,7 +204,7 @@ void InitGame(void) {
     invincibleCount = 1;
 
     // (raylib [core] example - 2D Camera system)
-    spacing = 0;
+    spacing = 0; // Space between buildings (there will be no space between buildings)
 
     // Loop that repeats so long as int 'i' is less than the size of MAX_BUILDINGS
 
@@ -397,17 +397,17 @@ void UpdateGame(void) {
         }
 
         // Float 'timeForSpeed' is made into an actual timer due to GetFrameTime().
-        timeForSpeed += GetFrameTime();
+        speedTimer += GetFrameTime();
 
         /* So long as gameOver is false, if timeForSpeed becomes equal to or greater than 5.0 seconds,
          * the speeds of bigEnemy are multiplied by 1.25, and timer resets. 
          * This makes it so the speed of bigEnemy increases every five seconds. */ 
         if(!gameOver) {
             if (count <= 50) // Stops increasing speed after 50 seconds {
-                if(timeForSpeed >= 5.0f) {
+                if(speedTimer >= 5.0f) {
                     bigEnemySpeedX *= 1.25;
                     bigEnemySpeedY *= 1.25;
-                    timeForSpeed = 0.0f;
+                    speedTimer = 0.0f;
                 }  
             }
 
@@ -446,7 +446,7 @@ void UpdateGame(void) {
                 // If count is less than 30, bigEnemy is drawn as red.
 
                 if(count < 30) {
-                    enemyTexture = defaultEnemyTexture;
+                    enemyTexture = angryTexture;
                 }
 
                 else {
@@ -455,14 +455,14 @@ void UpdateGame(void) {
                     if (count >= 30 && count < 50) {
                         bigEnemy.height = 100;
                         bigEnemy.width = 100;
-                        enemyTexture = biggerEnemyTexture;
+                        enemyTexture = furiousTexture;
                     }
                     /* If count is greater than 50, the height and width of bigEnemy both 
                      * increase to 130, and bigEnemy's texture is changed again. */ 
                     else {
                         bigEnemy.height = 130;
                         bigEnemy.width = 130;
-                        enemyTexture = massiveEnemyTexture;
+                        enemyTexture = crazedTexture;
                     }
              }
 
@@ -577,9 +577,9 @@ void UnloadGame(void) {
     UnloadTexture(smallInvincibleTexture);
     UnloadTexture(defaultTexture);
 
-    UnloadTexture(defaultEnemyTexture);
-    UnloadTexture(biggerEnemyTexture);
-    UnloadTexture(massiveEnemyTexture);
+    UnloadTexture(angryTexture);
+    UnloadTexture(furiousTexture);
+    UnloadTexture(crazedTexture);
 }
 
 // Update and Draw (one frame)
