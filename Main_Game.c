@@ -96,12 +96,12 @@ int spacing;
  // (From raylib [core] example - 2D Camera system)
 Camera2D camera;
 
-
-static void InitGame(void);         
-static void UpdateGame(void);       
-static void DrawGame(void);         
-static void UnloadGame(void);       
-static void UpdateDrawFrame(void);  
+// Pre-processed functions (will be expanded upon later)
+static void InitGame(void);         // Initialises the game
+static void UpdateGame(void);       // Updates the game every frame
+static void DrawGame(void);         // Draws the game
+static void UnloadGame(void);       // Unloads textures
+static void UpdateDrawFrame(void);  // Combines UpdateGame() and DrawGame()
 
 //------------------------------------------------------------------------------------------
 // Main function of program
@@ -410,7 +410,6 @@ void UpdateGame(void) {
                     timeForSpeed = 0.0f;
                 }  
             }
-        
 
         /* If the player collides with pellet, the position of pellet changes randomly within limits.
          * The 'score' variable increases by 10 every time they collide. */ 
@@ -570,6 +569,17 @@ void DrawGame(void) {{
 void UnloadGame(void) {
     UnloadTexture(playerTexture); 
     UnloadTexture(enemyTexture);
+
+    UnloadTexture(boostTexture);
+    UnloadTexture(shrinkTexture);
+    UnloadTexture(invincibleTexture);
+    UnloadTexture(pinkTexture);
+    UnloadTexture(smallInvincibleTexture);
+    UnloadTexture(defaultTexture);
+
+    UnloadTexture(defaultEnemyTexture);
+    UnloadTexture(biggerEnemyTexture);
+    UnloadTexture(massiveEnemyTexture);
 }
 
 // Update and Draw (one frame)
