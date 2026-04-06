@@ -187,7 +187,8 @@ void InitGame(void) {
 
     count = 0;
     score = 0;
-    highscore = 0;
+    // (Change after date: highscore has been removed from InitGame() because the highscore
+    // would not update after each retry, because highscore would be set to 0 every retry)
     timer = 0.0f;
     speedTimer = 0.0f;
 
